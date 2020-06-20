@@ -204,7 +204,7 @@ function dump(data) {
 var ajax_request;
 
 /*mycall*/
-function callAjax(action, params, button) {
+function callAjax(action, params, button, hideBusy) {
     dump(ajax_url + "/" + action + "?" + params);
 
     params += "&language=" + language;
@@ -224,7 +224,7 @@ function callAjax(action, params, button) {
                 dump("ajax abort");
                 busy(false, button);
             } else {
-                busy(true, button);
+                busy(hideBusy !== true, button);
             }
         },
         complete: function (data) {
@@ -334,6 +334,7 @@ function callAjax(action, params, button) {
                         });
 
                         dump("coordinates=>" + data.msg.length);
+                        console.log('AQUI?', data);
                         plotMainMap(data.msg);
 
                         break;
@@ -1743,20 +1744,23 @@ function tplTaskHistory(data) {
 
 function plotMainMap(data) {
     dump("plotMainMap");
+    console.log('PLOT MAIN MAP MEN');
     switch (map_provider) {
         case "google":
-            map = new GMaps({
-                div: ".primary_map",
-                lat: default_location_lat,
-                lng: default_location_lng,
-                //scrollwheel: false ,
-                zoom: 5,
-                styles: map_style,
-                markerClusterer: function (map) {
-                    return new MarkerClusterer(map);
-                },
-            });
-
+            if (!map) {
+                map = new GMaps({
+                    div: ".primary_map",
+                    lat: default_location_lat,
+                    lng: default_location_lng,
+                    //scrollwheel: false ,
+                    zoom: 5,
+                    styles: map_style,
+                    markerClusterer: function (map) {
+                        return new MarkerClusterer(map);
+                    },
+                });    
+            }
+            
             plotTaskMap(data);
 
             break;
@@ -1894,6 +1898,7 @@ function plotTaskMap(data) {
                     } else {
                         map_marker = driver_icon_offline;
                     }
+                    console.log('Estoy mandando a imprimir a...', val);
                     plotDriverToMap(val.lat, val.lng, map_marker, info_html);
                 }
             }
@@ -1946,9 +1951,11 @@ $(document).ready(function () {
     }
 
     setInterval(function () {
-        // Refresh auto
-        loadAgentDashboardSilent();
-    }, 2000);
+        // PRUEBA
+        
+        callAjax('getDashboardTask', getParamsMap(), undefined, true);
+        //loadAgentDashboardSilent();
+    }, 1000);
 }); /*end docu*/
 function getInitialNotifications() {
     action = "getInitialNotifications";
@@ -2192,7 +2199,7 @@ function plotDriverToMap(lat, lng, map_marker, info_html) {
         return;
     }
 
-    map.addMarker({
+    var mark = map.addMarker({
         lat: lat,
         lng: lng,
         icon: map_marker,
@@ -2200,6 +2207,7 @@ function plotDriverToMap(lat, lng, map_marker, info_html) {
             content: info_html,
         },
     });
+    console.log('esta es la marca!',mark);
 }
 
 function convertLatLongToAddress(lat, lng) {

@@ -163,8 +163,7 @@ function callAjaxSilent2(action, params, button) {
                 switch (action) {
                     case "loadAgentDashboard":
                         fillAgentDashboard(data);
-                        console.log("callAjaxSilent2 as called");
-                        plotTaskMap(data);
+                        console.log("callAjaxSilent2 as called", data);
                         break;
 
                     default:
