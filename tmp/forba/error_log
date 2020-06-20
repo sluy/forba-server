@@ -1,0 +1,12 @@
+[06-Jun-2020 21:27:33 UTC] PHP Deprecated:  Function get_magic_quotes_gpc() is deprecated in /home/forba/public_html/tmp/forba/yiiframework/web/CHttpRequest.php on line 130
+[06-Jun-2020 21:27:33 UTC] PHP Fatal error:  Uncaught CDbException: CDbConnection failed to open the DB connection. in /home/forba/public_html/tmp/forba/yiiframework/db/CDbConnection.php:405
+Stack trace:
+#0 /home/forba/public_html/tmp/forba/yiiframework/db/CDbConnection.php(347): CDbConnection->open()
+#1 /home/forba/public_html/tmp/forba/yiiframework/db/CDbConnection.php(325): CDbConnection->setActive(true)
+#2 /home/forba/public_html/tmp/forba/yiiframework/base/CModule.php(394): CDbConnection->init()
+#3 /home/forba/public_html/tmp/forba/yiiframework/base/CModule.php(103): CModule->getComponent('db')
+#4 /home/forba/public_html/tmp/forba/protected/components/AdminFunctions.php(1162): CModule->__get('db')
+#5 /home/forba/public_html/tmp/forba/protected/controllers/FrontController.php(13): AdminFunctions::checkIfTableExist('admin')
+#6 /home/forba/public_html/tmp/forba/yiiframework/web/CWebApplication.php(281): FrontController->init()
+#7 /home/forba/public_html/tmp/forba/yiiframework/web/CWebApplication.php(141): CWebApplication->runController('front/index')
+ in /home/forba/public_html/tmp/forba/yiiframework/db/CDbConnection.php on line 405
