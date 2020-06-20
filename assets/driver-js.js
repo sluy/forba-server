@@ -163,6 +163,8 @@ function callAjaxSilent2(action, params, button) {
                 switch (action) {
                     case "loadAgentDashboard":
                         fillAgentDashboard(data);
+                        console.log("callAjaxSilent2 as called");
+                        plotTaskMap(data);
                         break;
 
                     default:
@@ -344,5 +346,4 @@ function fillAgentDashboard(data) {
     } else {
         $(".agent-total").html("");
     }
-    plotTaskMap(data);
 }
