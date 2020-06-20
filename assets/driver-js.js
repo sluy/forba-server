@@ -293,7 +293,6 @@ function formatTableRow(data) {
 }
 
 function fillAgentDashboard(data) {
-    console.log(data);
     $(".agent-active-total").html(data.details.active.length);
     if (data.details.active.length > 0) {
         var html_offline = "";
@@ -345,4 +344,5 @@ function fillAgentDashboard(data) {
     } else {
         $(".agent-total").html("");
     }
+    plotTaskMap(data);
 }
