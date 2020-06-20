@@ -312,7 +312,7 @@ function fillAgentDashboard(data) {
             var info_window = "";
             info_window += val.first_name + " ";
             info_window += val.last_name;
-            setDriverMarker(val.location_lat, val.location_lng, info_window);
+            //setDriverMarker( val.location_lat , val.location_lng , info_window);
         });
         $(".agent-active").html(html_offline);
     } else {

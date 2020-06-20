@@ -1783,9 +1783,11 @@ function plotTaskMap(data) {
         var last_lat = "";
         var last_lng = "";
         bounds = [];
-
+        console.log("Estoy en plotTaskMap", data);
         $.each(data, function (key, val) {
-            if (!empty(val.lat)) {
+            if (empty(val.lat)) {
+                console.log("No se pudo mostrar a", val);
+            } else {
                 if (map_hide_delivery == 1) {
                     if (val.trans_type_raw == "delivery") {
                         return;
