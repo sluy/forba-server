@@ -4,18 +4,18 @@
    <div class="row">
      <div class="col-xs-6"><?php echo t("Agent")?></div>
      <div class="col-xs-6 text-right">
-     
+
      <a href="javascript:;" class="filter_map" data-toggle="modal" data-target="#modalMapFilter" >
         <i class="ion-ios-settings"></i>
      </a>
-     
+
      <a href="javascript:setMapCenter();"><i class="ion-ios-navigate-outline"></i></a>
-     
-     <a href="javascript:loadAgentDashboard();"><i class="ion-android-refresh"></i></a>
+
+     <!--<a href="javascript:loadAgentDashboard();"><i class="ion-android-refresh"></i></a>-->
      <!--<a href="javascript:;"><i class="ion-ios-search"></i></a>-->
-     
+
      </div><!-- col-->
-   </div> <!--row-->   
+   </div> <!--row-->
 </div> <!--blue_panel-->
 
 
@@ -32,13 +32,13 @@
  <li class="agent-offline">
 
  </li>
- 
+
  <li class="agent-total">
 
  </li>
 </ul>
 
-<?php 
-$this->renderPartial('/app/filter_map',array(   
+<?php
+$this->renderPartial('/app/filter_map',array(
 ));
 ?>
