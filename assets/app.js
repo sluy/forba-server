@@ -21,6 +21,10 @@ var delivery_map_bounds = [];
 var map_contact;
 var map_contact_marker;
 var map_contact_bounds = [];
+// Custom map markers.
+var GMarkers = {
+    driver: {},
+};
 
 $(document).ready(function () {
     $("ul#tabs li").click(function (e) {
@@ -334,7 +338,7 @@ function callAjax(action, params, button, hideBusy) {
                         });
 
                         dump("coordinates=>" + data.msg.length);
-                        console.log('AQUI?', data);
+                        console.log("AQUI?", data);
                         plotMainMap(data.msg);
 
                         break;
@@ -1744,7 +1748,6 @@ function tplTaskHistory(data) {
 
 function plotMainMap(data) {
     dump("plotMainMap");
-    console.log('PLOT MAIN MAP MEN');
     switch (map_provider) {
         case "google":
             if (!map) {
@@ -1758,11 +1761,10 @@ function plotMainMap(data) {
                     markerClusterer: function (map) {
                         return new MarkerClusterer(map);
                     },
-                });    
+                });
             }
-            
-            plotTaskMap(data);
 
+            plotTaskMap(data, true);
             break;
 
         case "mapbox":
@@ -1778,19 +1780,20 @@ function plotMainMap(data) {
     }
 }
 
-function plotTaskMap(data) {
+function plotTaskMap(data, dontReset) {
     if (data.length > 0) {
         // remove all pin
         dump("remove all pin");
-        map.removeMarkers();
+        if (dontReset !== true) {
+            map.removeMarkers();
+        }
 
         var last_lat = "";
         var last_lng = "";
         bounds = [];
-        console.log("Estoy en plotTaskMap", data);
         $.each(data, function (key, val) {
             if (empty(val.lat)) {
-                console.log("No se pudo mostrar a", val);
+                console.warn("Cant show mark (no lat/lng)", val);
             } else {
                 if (map_hide_delivery == 1) {
                     if (val.trans_type_raw == "delivery") {
@@ -1898,13 +1901,18 @@ function plotTaskMap(data) {
                     } else {
                         map_marker = driver_icon_offline;
                     }
-                    console.log('Estoy mandando a imprimir a...', val);
-                    plotDriverToMap(val.lat, val.lng, map_marker, info_html);
+                    plotDriverToMap(
+                        val.lat,
+                        val.lng,
+                        map_marker,
+                        info_html,
+                        val.driver_id
+                    );
                 }
             }
         }); /*end each*/
 
-        if (dashboard_run_silent == 2) {
+        if (dashboard_run_silent == 2 && dontReset !== true) {
             map.fitLatLngBounds(bounds);
         }
     } else {
@@ -1951,11 +1959,9 @@ $(document).ready(function () {
     }
 
     setInterval(function () {
-        // PRUEBA
-        
-        callAjax('getDashboardTask', getParamsMap(), undefined, true);
+        callAjax("getDashboardTask", getParamsMap(), undefined, true);
         //loadAgentDashboardSilent();
-    }, 1000);
+    }, 10000);
 }); /*end docu*/
 function getInitialNotifications() {
     action = "getInitialNotifications";
@@ -2192,22 +2198,26 @@ function switchAutoAssign() {
     }
 }
 
-function plotDriverToMap(lat, lng, map_marker, info_html) {
+function plotDriverToMap(lat, lng, map_marker, info_html, driverId) {
     dump("plotDriverToMap");
 
     if (empty(lat) && empty(lng)) {
         return;
     }
-
-    var mark = map.addMarker({
-        lat: lat,
-        lng: lng,
-        icon: map_marker,
-        infoWindow: {
-            content: info_html,
-        },
-    });
-    console.log('esta es la marca!',mark);
+    if (!GMarkers.driver[driverId]) {
+        GMarkers.driver[driverId] = map.addMarker({
+            lat: lat,
+            lng: lng,
+            icon: map_marker,
+            infoWindow: {
+                content: info_html,
+            },
+        });
+        console.log("creating marker for " + driverId);
+    } else {
+        GMarkers.driver[driverId].setPosition(new google.maps.LatLng(lat, lng));
+        console.log("updating marker for" + driverId);
+    }
 }
 
 function convertLatLongToAddress(lat, lng) {
