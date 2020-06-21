@@ -26,6 +26,9 @@ var GMarkers = {
     driver: {},
 };
 
+var RefitMainMap = true;
+
+
 $(document).ready(function () {
     $("ul#tabs li").click(function (e) {
         if (!$(this).hasClass("active")) {
@@ -1912,7 +1915,8 @@ function plotTaskMap(data, dontReset) {
             }
         }); /*end each*/
 
-        if (dashboard_run_silent == 2 && dontReset !== true) {
+        if (dashboard_run_silent == 2 &&  (RefitMainMap === true || dontReset !== true)) {
+            RefitMainMap = false;
             map.fitLatLngBounds(bounds);
         }
     } else {
