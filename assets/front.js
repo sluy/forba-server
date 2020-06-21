@@ -262,7 +262,11 @@ $(document).ready(function () {
         m.modal("show");
     });
     // Downloads
+
     $("ul#top-nav").append(
+        '<li><a href="/downloads/driver.apk">Descargar</a></li>'
+    );
+    $("ul#mobile-nav").append(
         '<li><a href="/downloads/driver.apk">Descargar</a></li>'
     );
 });
