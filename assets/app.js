@@ -1964,8 +1964,8 @@ $(document).ready(function () {
 
     setInterval(function () {
         callAjax("getDashboardTask", getParamsMap(), undefined, true);
-        //loadAgentDashboardSilent();
-    }, 10000);
+        loadAgentDashboardSilent();
+    }, 1000);
 }); /*end docu*/
 function getInitialNotifications() {
     action = "getInitialNotifications";
@@ -2202,6 +2202,7 @@ function switchAutoAssign() {
     }
 }
 
+
 function plotDriverToMap(lat, lng, map_marker, info_html, driverId) {
     dump("plotDriverToMap");
 
@@ -2220,7 +2221,10 @@ function plotDriverToMap(lat, lng, map_marker, info_html, driverId) {
         console.log("creating marker for " + driverId);
     } else {
         GMarkers.driver[driverId].setPosition(new google.maps.LatLng(lat, lng));
-        console.log("updating marker for" + driverId);
+        GMarkers.driver[driverId].setIcon(map_marker);
+        console.log("updating marker for" + driverId , {
+            lat, lng, map_marker, info_html, driverId
+        });
     }
 }
 
